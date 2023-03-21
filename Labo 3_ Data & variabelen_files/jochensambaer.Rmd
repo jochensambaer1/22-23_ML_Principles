@@ -1,0 +1,115 @@
+title: "Labo 3: Data & variabelen"
+author: "jochen sambaer"
+date: "2023-03-14"
+output: html_document
+```{r}
+library(AER)
+library(magrittr)
+library(data.table)
+library(knitr)
+library(reticulate)
+library(datasets)
+library(glmnet)
+library(mice)
+library(data.table)
+
+set.seed(42)
+
+opts_chunk$set(echo = FALSE)
+```
+We kiezen de dataset cars uit het package datasets. De dataset bevat data over de afstand die auto's afleggen voordat ze stoppen en de snelheid waarmee ze reden.
+
+```{r}
+# Laad de dataset 'cars' in van het datasets package
+data(cars)
+
+# Converteer de dataset naar een data.table
+setDT(cars)
+
+# Bekijk de eerste 6 rijen van de dataset
+head(cars)
+```
+De dataset cars bevat 50 observaties en 2 variabelen: speed en dist. De speed variabele is de snelheid waarmee de auto reed (in mijlen per uur) en de dist variabele is de afstand die de auto aflegde alvorens te stoppen (in feet).
+
+Laten we de distributie van de snelheid onderzoeken door middel van een histogram.
+
+```{r}
+# Maak een histogram van de snelheden in de dataset
+hist(cars$speed, main = "Histogram van snelheden", xlab = "Snelheid")
+
+```
+We zien dat de snelheid een normale verdeling volgt.
+
+Nu willen we de relatie tussen snelheid en afstand onderzoeken door middel van een scatterplot.
+
+```{r}
+# Plot de snelheid tegenover de afstand in de dataset
+plot(cars$distance, cars$speed, main = "Snelheid tegenover afstand", xlab = "Afstand", ylab = "Snelheid")
+
+```
+Er lijkt een duidelijke positieve correlatie te zijn tussen snelheid en afstand.
+
+Laten we ten slotte controleren of de variabelen speed en dist als natuurlijke getallen worden behandeld.
+
+```{r}
+# Zet de variabelen om naar integers
+cars$speed <- as.integer(cars$speed)
+cars$distance <- as.integer(cars$distance)
+```
+De variabelen worden behandeld als numerieke (reële) getallen. Om problemen bij verdere analyse te voorkomen, is het niet nodig om deze om te zetten naar integers.
+```{r}
+# Controleer het datatype van de variabelen
+class(cars$speed)
+class(cars$distance)
+# Bekijk de minimum en maximum snelheid in de dataset
+min(cars$speed)
+max(cars$speed)
+```
+
+
+
+# Part 2
+
+```{r}
+# Read the input file
+data <- read.csv("input.csv", header = FALSE)
+```
+
+```{r}
+# Initialize a vector to store the frequencies
+freq <- c(0)
+```
+
+```{r}
+# Initialize a variable to keep track of the current frequency
+current <- 0
+```
+
+```{r}
+# Loop through the data and calculate the frequency changes
+for (i in 1:length(data)) {
+  current <- current + data[i]
+  freq <- c(freq, current)
+}
+```
+
+```{r}
+# Initialize a variable to store the repeating frequencyS
+repeat_freq <- NULL
+```
+
+```{r}
+# Loop through the frequencies and find the repeating frequency
+for (i in 1:length(freq)) {
+  if (freq[i] %in% freq[1:i - 1]) {
+    repeat_freq <- freq[i]
+    break
+  }
+}
+```
+
+
+```{r}
+# Print the repeating frequency
+print(repeat_freq)
+```

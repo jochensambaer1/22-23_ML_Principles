@@ -1,0 +1,38 @@
+---
+title: "test"
+author: "Sambaer jochen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup,include=FALSE}
+library(AER)
+library(magrittr)
+library(data.table)
+library(knitr)
+library(reticulate)
+
+data(OECDGas)
+
+(OECDGas <- OECDGas %>% as.data.table)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+
+OECDGas[order(year), .(`Mean price`= mean(price)), year] %>%
+  plot(type = "line")
+(prices_log <- OECDGas$price) %>% head
+py$prices_lin %>% density %>%
+  plot(main="Densiteit van prijs")
+```
+
+```{python}
+
+prices_lin = [10**(elem) for elem in r.prices_log]
+
+```
+
